@@ -18,7 +18,7 @@ public class Joueur{
         
     }
     
-    public void AttaqueAdverse(int x , int y){
+    public void AttaqueAdverse(Joueur j2 , int x , int y){//attaque du joueur adverse j2
         boolean trouve = false;
         int i = 0;
         while(!trouve && i<=nbreCasesBateau.length){//vérification pour chaque bateau
@@ -27,9 +27,11 @@ public class Joueur{
                 grille[x][y] = 0;
                 if(i = 0){
                     System.out.println("Loupé");
+                    j2.coupsPrecedents[x][y] = 1;
                 }else{
                     System.out.println("Touché");
                     nbreCasesBateau[i]--;
+                    j2.coupsPrecedents[x][y] = 2;
                 }
             }
             i++;
@@ -53,9 +55,13 @@ public class Joueur{
         }
     }
     
-    public void enregistreCoup(int x , int y){
-        coupsPrecedents[x][y] = 1;
-    }
+    /*public void enregistreCoup(int x , int y){
+        if(grille[x][y] = 0){
+        coupsPrecedents[x][y] = 1; //
+        }else{
+            coupsPrecedents[x][y] = 2;//on a touché qq chose
+        }
+    }*/ //pas utile car on l'a déjà dans la méthode attaqueAdverse
     
     public void afficheGrille(){
         System.out.println("Coups joués depuis le début de la partie par vous : ");
@@ -63,8 +69,10 @@ public class Joueur{
             for(int j = 0 ; j<coupsPrecedents[i].length ; j++){
                 if(coupsPrecedents[i][j] == 0){
                     System.out.print(" . ");
-                }else{
+                }else if (coupsPrecedents[i][j] == 1){
                     System.out.print(" X ")
+                }else{
+                    System.out.print(" O ");
                 }
                 
             }
