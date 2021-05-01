@@ -19,10 +19,30 @@ public class Joueur{
     }
     
     public void AttaqueAdverse(int x , int y){
-        if (grille[x][y]==0){
+        boolean trouve = false;
+        int i = 0;
+        while(!trouve && i<=nbreCasesBateau.length){//vérification pour chaque bateau
+            if(grille[x][y]==i){
+                trouve = true;
+                grille[x][y] = 0;
+                if(i = 0){
+                    System.out.println("Loupé");
+                }else{
+                    System.out.println("Touché");
+                    nbreCasesBateau[i]--;
+                }
+            }
+            i++;
+        }
+        if(nbreCasesBateau[i-1]==0){
+            System.out.println("Coulé");
+        }
+        /*if (grille[x][y]==0){
             grille[x][y] = 0;
             System.out.println("Loupé");
-        }else if ()
+        }else if (grille[x][y]==1){
+            
+        }*/
     }
     
     public void initialiseCoupsPrecedents(){
