@@ -1,12 +1,12 @@
 public class Joueur{
     public int [][] grille;
     public int [][] coupsPrecedents;
-    public int [] nbreCasesBateau;
+    public int [] nbreCasesBateau = {2, 3, 3, 4, 5};
     
     public joueur() {
         this.grille = new int [10][10];//chaque case va prendre une valeur entre -1 et 4 pour indiquer s'il n'y a rien ou le numéro du bateau
         this.coupsPrecedents = new int [10][10];
-        this.nbreCasesBateau = {2, 3, 3, 4, 5};//nombre de cases par bateaux vivantes au début, affectation selon les règles classiques du jeu
+        //this.nbreCasesBateau = {2, 3, 3, 4, 5};//nombre de cases par bateaux vivantes au début, affectation selon les règles classiques du jeu
     }
     
     public void PlacementBateaux(Bateau b1 , int numero){
@@ -25,7 +25,7 @@ public class Joueur{
             if(grille[x][y]==i){
                 trouve = true;
                 grille[x][y] = -1;//la cellule de la grille devient morte 
-                if(i = 0){
+                if(i == 0){
                     System.out.println("Loupé");
                     j2.coupsPrecedents[x][y] = 0;//0 pour affichage du tableau la méthode verra des bateaux 0 partout et donc affichera des croix pour indiquer une frappe à cet endroit
                 }else{
@@ -69,6 +69,16 @@ public class Joueur{
     }*/ //pas utile car on l'a déjà dans la méthode attaqueAdverse
     
     public void afficheGrille(int [][] matrice){
+        System.out.print("     ");
+        for(byte i = 0; i < matrice[0].length ; i+=1){
+            System.out.print(i+1 + "  ");
+        }
+        System.out.println("\n");
+        if (i+1<10){
+                System.out.print(" ");
+            }
+            System.out.print(i+1 + "   ");
+            
         for(int i = 0 ; i<matrice.length ; i++){
             for(int j = 0 ; j<matrice[i].length ; j++){
                 if(matrice[i][j] == -1){
