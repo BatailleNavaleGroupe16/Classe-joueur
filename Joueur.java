@@ -1,5 +1,234 @@
-//Version 8/05/21
+//Version 15/05
 import java.util.Scanner;
+public class Joueur{
+    public byte [][] bateaux={
+        {1,1,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0,0},
+    };
+        
+        
+        
+        
+    //public byte [][] bateaux;
+    public byte type;
+    public byte [][] coupsPrecedents;
+    public byte [][] coupsOrdi;
+    public byte [] nbreCasesBateau = {2, 3, 3, 4, 5};
+    //public byte nbBateaux = 5;
+    public byte nbBateaux = 1;
+    private byte ligne;
+    private byte colonne;
+    private byte caseL;
+    private byte caseC;
+    private byte touche;
+    
+    Scanner sc = new Scanner(System.in);
+    
+    
+    /*public Joueur() {
+        this.coupsPrecedents = new byte [10][10];
+        //
+        //Mettre le placement des bateaux ici 
+    }*/
+    
+    public Joueur(byte type) {
+        
+        this.type = type; 
+        
+        //1 pour un joueur humain qui cache ; 2 pour un humain qui cherche contre ordi ; 3 pour ordi qui cache juste ; 4 pour ordi qui joue
+        /*
+        1 jeu classique jvj ou contre ordi en mode attaque -> placement bateaux, tableau des coups
+        2 joueur contre ordi qui cache -> pas de placement des bateaux, tableau des coups
+        3 ordi qui cache juste -> placement des bateaux, pas de coups passés ni futurs
+        4 ordi en mode attaque -> placement bateaux, coups passés et futurs
+        */
+        
+        if (this.type == 1){
+            this.coupsPrecedents = new byte [10][10];
+            //placement bateaux
+        }else if (this.type ==2){
+            this.coupsPrecedents = new byte [10][10];
+        }else if (this.type ==3){
+            //placement bateaux
+        }else if (this.type ==4){
+            this.coupsPrecedents = new byte [10][10];
+            this.coupsOrdi = new byte [10][10];
+            //placement bateaux
+        }
+        
+    }
+    
+    
+    
+    
+    //Gère la manière d'attaquer selon si humain ou ordinateur
+    /**
+     * Méthode pour déterminer la manière d'attaquer selon ordi ou joueur
+     * Prends la cible en paramètre
+     * 
+     */
+    public void Attaque(Joueur cible){
+        
+        if ((this.type == 1) || (this.type ==2)){
+            this.AttaqueJoueur(cible);
+        }else if (this.type ==4){
+            this.AttaqueOrdi(cible);
+        }
+        
+    }
+    
+    
+    /**
+     * Méthode pour le choix de la case à attaquer pour l'ordi
+     * Prend la cible en paramètre
+     * 
+     */
+    public void AttaqueOrdi(Joueur cible){
+        // jeu pseudo aléatoire sur cases paires
+        //quand touche, va chercher à toucher autour -> augmentation du score des cases voisines de 2 ou 3 points. si rate, diminue de 1 ou 2 scores cases voisines => voir équilibrage score
+        // if en mode recherche, 
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    /**
+     * Méthode pour le choix de la case à attaquer pour humain
+     * Prends la cible en paramètre
+     * 
+     */
+    public void AttaqueJoueur(Joueur cible){
+        
+        //Choix de l'attaque
+        
+        do{
+            
+            //choix endroit attaque
+            do{
+                System.out.print("Choisissez la ligne à attaquer ");
+                this.ligne = sc.nextByte();
+            }while( (this.ligne<1) || (this.ligne>this.bateaux.length) );
+            this.ligne-=1;
+            
+            do{
+                System.out.print("Choisissez la colonne à attaquer ");
+                this.colonne = sc.nextByte();
+            }while( (this.colonne<1) || (this.colonne>this.bateaux[0].length) );
+            this.colonne -=1;
+        }while(this.coupsPrecedents[this.ligne][this.colonne] != 0);
+        
+        this.caseL = this.ligne;
+        this.caseC = this.colonne;
+        System.out.println("Vous attaquez la case " + (this.ligne+1) + " " + (this.colonne+1));
+        this.AttaqueCase(cible);
+    }
+    
+    
+    
+    
+    
+    /**
+     * Méthode pour l'attaque de la case visée
+     * Prend la cible en paramètre
+     * 
+     */
+    public void AttaqueCase(Joueur cible){    
+        
+        //Gestion de l'attaque
+        
+        this.touche = cible.bateaux[this.caseL][this.caseC]; 
+        
+        if (this.touche ==0){
+            System.out.println("Loupé");
+            this.coupsPrecedents[this.caseL][this.caseC] = -1;
+        }else{
+            System.out.println("Touché");
+            cible.nbreCasesBateau[touche-1] -=1;
+            if (cible.nbreCasesBateau[touche-1] == 0){
+                cible.nbBateaux -=1;
+            }
+            //cible.caseVie -=1;
+            this.coupsPrecedents[this.caseL][this.caseC] = -2;
+                
+        }
+        
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /**
+     * Méthode pour l'affichage des coups joués
+     * Prend le nombre de bateaux restant à l'autre en paramètre
+     * 
+     */
+    public void afficheCoups(byte bateauxAdv){
+        
+        if (this.type<=2){
+            System.out.print("      ");
+            for(byte i = 0; i < this.coupsPrecedents[0].length ; i+=1){
+                System.out.print(i+1 + "  ");
+            }
+            System.out.println("\n");
+            
+            for(int i = 0 ; i<this.coupsPrecedents.length ; i++){
+                
+                if (i+1<10){
+                    System.out.print(" ");
+                }
+                System.out.print(i+1 + "   ");
+                
+                for(int j = 0 ; j<this.coupsPrecedents[i].length ; j++){
+                    
+                    if(this.coupsPrecedents[i][j] == 0){
+                        System.out.print(" . ");
+                    }else if (this.coupsPrecedents[i][j] == -1){// || matrice[i][j] == 1 || matrice[i][j] == 2 || matrice[i][j] == 3 || matrice[i][j] == 4){
+                        System.out.print(" X ");
+                    }else if (this.coupsPrecedents[i][j] == -2){
+                        System.out.print(" O ");
+                    }else{
+                        System.out.print(" E ");
+                    }
+                    
+                }
+                System.out.println();
+            }
+            System.out.println("\n" + "Il reste " + bateauxAdv + " bateaux à trouver");
+        }
+    }
+    
+    public boolean fini(){
+        return !(nbBateaux==0);
+    }
+    
+    
+    
+}
+
+
+
+
+
+//Version 8/05/21
+/*import java.util.Scanner;
 public class Joueur{
     public byte [][] bateaux;
     public byte [][] coupsPrecedents;
@@ -39,7 +268,7 @@ public class Joueur{
     }*/
     
     
-    public void Attaque(Joueur cible){
+ /*   public void Attaque(Joueur cible){
         
         //Choix de l'attaque
         
@@ -102,7 +331,7 @@ public class Joueur{
      * Méthode pour l'affichage des coups joués
      * 
      */
-    public void afficheCoups(){
+ /*   public void afficheCoups(){
         System.out.print("      ");
         for(byte i = 0; i < this.coupsPrecedents[0].length ; i+=1){
             System.out.print(i+1 + "  ");
@@ -138,7 +367,7 @@ public class Joueur{
     }
     
     
-}
+}*/
 
 
 //Version avant 8/05/21
